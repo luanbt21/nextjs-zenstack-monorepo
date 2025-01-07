@@ -1,0 +1,53 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+// generator drizzle {
+//   provider = "drizzle-prisma-generator"
+//   output   = "../src/drizzle"
+// }
+
+plugin openapi {
+  provider = '@zenstackhq/openapi'
+  // flavor = 'rest'
+  output = './openapi.json'
+  title = 'Auto generated API'
+  version = '0.1.0'
+  summary = 'Created with ZenStack'
+  description = 'Auto generated API created with ZenStack'
+  prefix = '/api/models'
+  securitySchemes = {
+        bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+        basic: { type: 'http', scheme: 'basic' },
+  // apiKey: { type: 'apiKey', in: 'header', name: 'X-API-KEY' }
+    }
+}
+
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
