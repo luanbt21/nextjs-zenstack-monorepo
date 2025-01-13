@@ -1,5 +1,5 @@
 # Variables
-IMAGE_NAME=ghcr.io/songphantech/mta
+IMAGE_NAME=ghcr.io/luanbt21/my-turborepo
 DEV_TAG=latest
 RELEASE_TAG=release
 SERVER=swantech
@@ -29,13 +29,13 @@ push:
 
 # Deploy the development image to the remote server
 deploy:
-	ssh $(SERVER) $(COMPOSE_CMD) mta_be -d
+	ssh $(SERVER) $(COMPOSE_CMD) my-turborepo_be -d
 
 # Build, push, and deploy the release image
 release:
 	docker build -t $(IMAGE_NAME):$(RELEASE_TAG) .
 	docker push $(IMAGE_NAME):$(RELEASE_TAG)
-	ssh $(SERVER) $(COMPOSE_CMD) mta_be -d
+	ssh $(SERVER) $(COMPOSE_CMD) my-turborepo_be -d
 
 # Clean up local Docker images
 clean:
